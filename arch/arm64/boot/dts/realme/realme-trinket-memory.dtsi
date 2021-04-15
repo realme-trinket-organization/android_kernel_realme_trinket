@@ -78,5 +78,6 @@
 		pmsg-size = <0x200000>;
 		record-size = <0x100000>;
 		console-size = <0x100000>;
+		ecc-size = <0x10>;
 	};
 };

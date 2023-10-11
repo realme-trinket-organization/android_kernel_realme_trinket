@@ -16,15 +16,15 @@
 
 &firmware {
 	android {
+		boot_devices = "soc/4744000.sdhci";
 		vbmeta {
 			parts = "vbmeta,boot,system,vendor,dtbo,recovery,odm";
 		};
 
 		fstab {
+			/delete-node/ vendor;
 			vendor {
-				dev = "/dev/block/platform/soc/4744000.sdhci/by-name/vendor";
-				mnt_flags = "ro,barrier=1";
-				fsmgr_flags = "wait";
+				status = "disabled";
 			};
 		};
 	};

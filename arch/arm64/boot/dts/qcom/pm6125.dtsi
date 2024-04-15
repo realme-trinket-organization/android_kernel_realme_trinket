@@ -45,20 +45,12 @@
 				qcom,pull-up = <1>;
 				linux,code = <KEY_POWER>;
 			};
-			//#ifndef CONFIG_VENDOR_EDIT
-			//Yunqing.Zeng@BSP.Kernel.Driver, 2019/04/03, Modify for key adjust.
-			//qcom,pon_2 {
-			//	qcom,pon-type = <PON_POWER_ON_TYPE_RESIN>;
-			//	qcom,pull-up = <1>;
-			//	linux,code = <KEY_VOLUMEDOWN>;
-			//};
-			//#else
+
 			qcom,pon_2 {
 				qcom,pon-type = <PON_POWER_ON_TYPE_RESIN>;
 				qcom,pull-up = <1>;
-				linux,code = <KEY_VOLUMEUP>;
+				linux,code = <KEY_VOLUMEDOWN>;
 			};
-			//#endif
 		};
 
 		pm6125_vadc: vadc@3100 {

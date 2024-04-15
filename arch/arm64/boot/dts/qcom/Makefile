@@ -1,20 +1,4 @@
 # SPDX-License-Identifier: GPL-2.0
-ifneq ($(CONFIG_VENDOR_EDIT),)
-ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
-	dtbo-$(CONFIG_ARCH_TRINKET) += trinket-idp-overlay-19743.dtbo
-	trinket-idp-overlay-19743.dtbo-base := trinket-19743.dtb
-	dtbo-$(CONFIG_ARCH_TRINKET) += trinket-idp-overlay-19632.dtbo
-	trinket-idp-overlay-19632.dtbo-base := trinket-19632.dtb
-	dtbo-$(CONFIG_ARCH_TRINKET) += trinket-idp-overlay-19631.dtbo
-	trinket-idp-overlay-19631.dtbo-base := trinket-19631.dtb
-else
-	dtb-$(CONFIG_ARCH_TRINKET)	+= trinket-idp-19631.dtb
-	dtb-$(CONFIG_ARCH_TRINKET)	+= trinket-idp-19632.dtb
-	dtb-$(CONFIG_ARCH_TRINKET)	+= trinket-idp-19743.dtb
-endif
-
-else
-
 ifeq ($(TARGET_BOARD_TYPE),auto)
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 	dtbo-$(CONFIG_ARCH_SM8150) += \
@@ -603,8 +587,6 @@ dtb-$(CONFIG_ARCH_SDM429W) += sdm429-wtp.dtb\
 endif
 
 endif
-
-endif # CONFIG_VENDOR_EDIT
 
 ifeq ($(CONFIG_ARM64),y)
 always		:= $(dtb-y)

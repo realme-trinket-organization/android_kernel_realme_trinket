@@ -53,10 +53,6 @@
 		swr0 = &swr0;
 		swr1 = &swr1;
 		swr2 = &swr2;
-		//#ifdef CONFIG_VENDOR_EDIT
-		/*Ping.Zhang@BSP.TP.Function, 2019/05/17, add for TP*/
-		spi0 = &qupv3_se2_spi;
-		//#endif
 	};
 
 	cpus {
@@ -401,29 +397,16 @@
 			compatible = "android,firmware";
 			vbmeta {
 				compatible = "android,vbmeta";
-				//#ifndef CONFIG_VENDOR_EDIT
-				//parts = "vbmeta,boot,system,vendor,dtbo";
-				//#else
-				parts = "vbmeta,boot,system,vendor,dtbo,recovery,odm";
-				//#endif
+				parts = "vbmeta,boot,system,vendor,dtbo";
 			};
 			fstab {
 				compatible = "android,fstab";
 				vendor {
 					compatble = "android,vendor";
-					//#ifndef CONFIG_VENDOR_EDIT
-					//dev = "/dev/block/platform/soc/4804000.ufshc/by-name/vendor";
-					//#else
-					dev = "/dev/block/platform/soc/4744000.sdhci/by-name/vendor";
-					//#endif
+					dev = "/dev/block/platform/soc/4804000.ufshc/by-name/vendor";
 					type = "ext4";
 					mnt_flags = "ro,barrier=1,discard";
-					//#ifndef CONFIG_VENDOR_EDIT
-					//#Yunqing.Zeng@BSP.Kernel.Driver, 2019/03/28, Modify for AB partition disable.
-					//fsmgr_flags = "wait,slotselect,avb";
-					//#else
-					fsmgr_flags = "wait";
-					//#endif
+					fsmgr_flags = "wait,slotselect,avb";
 					status = "ok";
 				};
 				persist {
@@ -471,72 +454,9 @@
 		removed_region: removed_region@46200000 {
 			compatible = "removed-dma-pool";
 			no-map;
-			//#ifdef CONFIG_ODM_WT_EDIT
-			//Hao.liu@BSP.Fingerprint.Basic, 2019-10-16, add to enlarge memory of tz to 56M
-			reg = <0 0x46200000 0 0x3800000>;
-			//#else
-			//reg = <0 0x46200000 0 0x7000000>;
-			//#endif /* CONFIG_VENDOR_EDIT */
+			reg = <0 0x46200000 0 0x2d00000>;
 		};
 
-		pil_camera_mem: camera_region@6ab00000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x6ab00000 0 0x500000>;
-		};
-
-		pil_modem_mem: modem_region@6b000000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x6b000000 0 0x8e00000>;
-		};
-
-		pil_video_mem: pil_video_region@73e00000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x73e00000 0 0x500000>;
-		};
-
-		wlan_msa_mem: wlan_msa_region@74300000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x74300000 0 0x200000>;
-		};
-
-		pil_cdsp_mem: cdsp_regions@74500000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x74500000 0 0x1e00000>;
-		};
-
-//#ifdef CONFIG_VENDOR_EDIT
-// changhuanli@MM.Audiodriver.audio, 2019/12/28, Modify for add adsp mem from 0x1E00000 to 0x2000000
-		pil_adsp_mem: pil_adsp_region@76300000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x76300000 0 0x2000000>;
-		};
-
-		pil_ipa_fw_mem: ips_fw_region@78300000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x78300000 0 0x10000>;
-		};
-
-		pil_ipa_gsi_mem: ipa_gsi_region@78310000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x78310000 0 0x5000>;
-		};
-
-		pil_gpu_mem: gpu_region@78315000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x78315000 0 0x2000>;
-		};
-//#endif
-//#else
-/*
 		pil_modem_mem: modem_region@4b000000 {
 			compatible = "removed-dma-pool";
 			no-map;
@@ -584,8 +504,12 @@
 			no-map;
 			reg = <0 0x57115000 0 0x2000>;
 		};
-*/
-//#endif
+
+		cdsp_sec_mem: cdsp_sec_regions@5f800000 {
+			compatible = "removed-dma-pool";
+			no-map;
+			reg = <0 0x5f800000 0 0x1e00000>;
+		};
 
 		qseecom_mem: qseecom_region@5e400000 {
 			compatible = "shared-dma-pool";
@@ -649,7 +573,7 @@
 		};
 
 		disp_rdump_memory: disp_rdump_region@5c000000 {
-			reg = <0x0 0x5c000000 0x0 0x01000000>;
+			reg = <0x0 0x5c000000 0x0 0x00f00000>;
 			label = "disp_rdump_region";
 		};
 
@@ -673,37 +597,6 @@
 		};
 	};
 };
-
-/*#ifdef CONFIG_ODM_WT_EDIT Hao.liu@BSP.Fingerprint.Basic 2020-03-23 add for fingerprint */
-&soc {
-    oppo_fp_common { //Slave driver and CS ID
-        compatible = "oppo,fp_common"; //Manufacture, and Model
-        oppo,fp-id1 = <&tlmm 113 0x00>;
-        pinctrl-names = "default";
-        pinctrl-0 = <&gpio_id1_default>;
-    };
-
-    oppo_secure_common { //Slave driver and CS ID
-        compatible = "oppo,secure_common"; //Manufacture, and Model
-    };
-
-    fpc_fpc1020 { //Slave driver and CS ID
-        compatible = "fpc,fpc1020"; //Manufacture, and Model
-        fpc,irq-gpio = <&tlmm 92 0x00>;
-        vdd_io-supply = <&L9A>;  // 1.8V
-        pinctrl-names = "default";
-        pinctrl-0 = <&gpio_fpc_irq_default>;
-    };
-    egis_fp520 { //Slave driver and CS ID
-        compatible = "egistec,et520";
-        //ldo7-supply = <&L7P>;  // pm8008_l7 for egis
-        egistec,gpio_rst = <&tlmm 93 0x00>;
-        egistec,gpio_irq = <&tlmm 92 0x00>;
-        egistec,gpio_pwr_en = <&tlmm 48 0x00>;
-    };
-
-};
-/*#endif CONFIG_ODM_WT_EDIT */
 
 &soc {
 	#address-cells = <1>;
@@ -1203,19 +1096,6 @@
 		};
 	};
 
-	/* Lijie.Yang@ODM_WT.Kernel.Security.1941873, 2020/03/20, add for secboot_fuse_reg & serial_num node in /proc to get fuse status and cpuid */
-	sn_fuse: snfuse@0x1b46134 {
-		compatible = "qcom,sn-fuse";
-		reg = <0x1b46134 0x4>;
-		reg-names = "sn-base";
-	};
-
-	sec_boot_fuse: secbootfuse@0x1b40458 {
-		compatible = "qcom,sec-boot-fuse";
-		reg = <0x1b40458 0x4>;
-		reg-names = "sec-boot-base";
-	};
-
 	restart@440b000 {
 		compatible = "qcom,pshold";
 		reg = <0x440b000 0x4>,
@@ -1340,10 +1220,7 @@
 		reg = <0xf017000 0x1000>;
 		reg-names = "wdt-base";
 		interrupts = <0 3 0>, <0 4 0>;
-		//#ifdef CONFIG_ODM_WT_EDIT
-		//Lijie.Yang@ODM_WT.BSP.Kernel.Stability.1941873, 2020/03/31, Add for set watchdog timeout=15s
-		qcom,bark-time = <15000>;
-		//#endif
+		qcom,bark-time = <11000>;
 		qcom,pet-time = <9360>;
 		qcom,ipi-ping;
 		qcom,wakeup-enable;
@@ -2078,12 +1955,7 @@
 
 	qcom_seecom: qseecom@46d00000 {
 		compatible = "qcom,qseecom";
-               //#ifdef CONFIG_ODM_WT_EDIT
-               //Hao.Liu@BSP.Fingerprint.Basic, 2020-04-16, add to enlarge memory of tz to 45M
-               reg = <0x46d00000 0x2d00000>;
-               //#else
-               //reg = <0x46d00000 0x6000000>;
-               //#endif
+		reg = <0x46d00000 0x2200000>;
 		reg-names = "secapp-region";
 		memory-region = <&qseecom_mem>;
 		qcom,hlos-num-ce-hw-instances = <1>;
@@ -2116,12 +1988,7 @@
 
 	qcom_smcinvoke: smcinvoke@46d00000 {
 		compatible = "qcom,smcinvoke";
-               //#ifdef CONFIG_ODM_WT_EDIT
-               //Hao.Liu@BSP.Fingerprint.Basic, 2020-04-16, add to enlarge memory of tz to 45M
-               reg = <0x46d00000 0x2d00000>;
-               //#else
-               //reg = <0x46d00000 0x3C00000>;
-               //#endif
+		reg = <0x46d00000 0x2200000>;
 		reg-names = "secapp-region";
 	};
 
@@ -3010,17 +2877,15 @@
 	bat_therm_400k {
 		qcom,lut-index = <1>;
 	};
-//#ifdef CONFIG_VENDOR_EDIT
-/*LiYue@BSP.CHG.Basic, 2019/07/04, remove for usb connector temp check*/
-/*	conn_therm {
+
+	conn_therm {
 		reg = <ADC_GPIO1_PU2>;
 		label = "conn_therm";
 		qcom,ratiometric;
 		qcom,hw-settle-time = <200>;
 		qcom,pre-scaling = <1 1>;
 	};
-*/
-//#endif
+
 	skin_therm {
 		reg = <ADC_GPIO2_PU2>;
 		label = "skin_therm";
@@ -3048,24 +2913,17 @@
 };
 
 &pmi632_adc_tm {
-//#ifdef CONFIG_VENDOR_EDIT
-/*LiYue@BSP.CHG.Basic, 2019/07/04, remove for usb connector temp check*/
-	io-channels = //<&pmi632_vadc ADC_GPIO1_PU2>,
-//#else
-//	io-channels = <&pmi632_vadc ADC_GPIO1_PU2>,
-//#endif
+	io-channels = <&pmi632_vadc ADC_GPIO1_PU2>,
 			<&pmi632_vadc ADC_VBAT_SNS>,
 			<&pmi632_vadc ADC_GPIO2_PU2>;
 
 	/* Channel nodes */
-//#ifdef CONFIG_VENDOR_EDIT
-/*LiYue@BSP.CHG.Basic, 2019/07/04, remove for usb connector temp check*/	
-/*	conn_therm {
+	conn_therm {
 		reg = <ADC_GPIO1_PU2>;
 		qcom,ratiometric;
 		qcom,hw-settle-time = <200>;
-	};*/
-//#endif
+	};
+
 	vbat_sns {
 		reg = <ADC_VBAT_SNS>;
 		qcom,kernel-client;
@@ -3157,40 +3015,7 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&fsa_usbc_ana_en>;
 	};
-
-	/* ifdef CONFIG_VENDOR_EDIT*/
-	/* GuoWang.Huang@PSW.MM.AudioDriver.Machine,2020/03/05, Add for bring up*/
-	//aw87339_rcv@58{
-		//compatible = "awinic,aw87339_pa_rec";
-		//reg = <0x58>;
-		//pinctrl-1 = <&awinic_rcv_rst_active>;
-		//pinctrl-0 = <&awinic_rcv_rst_suspend>;
-		//reset-gpio = <&tlmm 113 0x01>;
-		//qcom,gpio-reset = <1>;
-		//qcom,gpio-req-tbl-num = <0>;
-		//qcom,gpio-req-tbl-flags = <0>;
-		//qcom,gpio-req-tbl-label = "RCV_RESET";
-	//};
-	/* CONFIG_VENDOR_EDIT */
 };
-
-/* ifdef CONFIG_VENDOR_EDIT */
-/* GuoWang.Huang@PSW.MM.AudioDriver.Machine,2020/03/05, Add for bring up*/
-/*&qupv3_se7_i2c {
-	status = "ok";
-	aw87339_spk@59{
-		compatible = "awinic,aw87339_pa_spk";
-		reg = <0x59>;
-		pinctrl-1 = <&awinic_spk_rst_active>;
-		pinctrl-0 = <&awinic_spk_rst_suspend>;
-		reset-gpio = <&tlmm 114 0x01>;
-		qcom,gpio-reset = <1>;
-		qcom,gpio-req-tbl-num = <0>;
-		qcom,gpio-req-tbl-flags = <0>;
-		qcom,gpio-req-tbl-label = "SPK_RESET";
-	};
-};
- CONFIG_VENDOR_EDIT */
 
 &msm_vidc {
 	qcom,cx-ipeak-data = <&cx_ipeak_lm 6>;
@@ -3289,31 +3114,17 @@
 };
 
 &L1P {
-//#ifdef CONFIG_ODM_WT_EDIT
-	/*Danfeng.Zhang@ODM_WT.Camera.driver, 1372106, 20180508, add for
-	WT camera driver,set different voltage for camera sensor*/
-	regulator-min-microvolt = <1050000>;
-/*#else
-	regulator-min-microvolt = <1200000>;
-//#endif*/ /*CONFIG_ODM_WT_EDIT*/
 	regulator-max-microvolt = <1200000>;
 	qcom,min-dropout-voltage = <100000>;
 };
 
 &L2P {
-	regulator-min-microvolt = <1104000>;
-	regulator-max-microvolt = <1200000>;
+	regulator-max-microvolt = <1104000>;
 	qcom,min-dropout-voltage = <100000>;
 };
 
 &L3P {
-//#ifdef CONFIG_ODM_WT_EDIT
-	/*Danfeng.Zhang@ODM_WT.Camera.driver, 1372106, 20180508, add for
-	WT camera driver,set different voltage for camera sensor*/
-	regulator-min-microvolt = <2700000>;
-/*#else
 	regulator-min-microvolt = <2800000>;
-//#endif*/ /*CONFIG_ODM_WT_EDIT*/
 	regulator-max-microvolt = <2800000>;
 };
 

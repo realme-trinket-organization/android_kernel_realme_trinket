@@ -144,9 +144,8 @@
 			};
 		};
 	};
-//#ifdef CONFIG_VENDOR_EDIT
-/*LiYue@BSP.CHG.Basic, 2019/07/04, add for usb connector temp check*/
-/*	conn-therm-adc {
+
+	conn-therm-adc {
 		polling-delay-passive = <0>;
 		polling-delay = <0>;
 		thermal-governor = "user_space";
@@ -160,8 +159,7 @@
 			};
 		};
 	};
-*/
-//#endif
+
 	skin-therm-adc {
 		polling-delay-passive = <0>;
 		polling-delay = <0>;

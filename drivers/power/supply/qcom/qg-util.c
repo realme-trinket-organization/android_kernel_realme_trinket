@@ -356,10 +356,13 @@ int qg_get_battery_temp(struct qpnp_qg *chip, int *temp)
 {
 	int rc = 0;
 
+#ifndef CONFIG_VENDOR_EDIT
+/*LiYue@BSP.CHG.Baisc, 2019/07/04, remove for charging*/
 	if (chip->battery_missing) {
 		*temp = 250;
 		return 0;
 	}
+#endif
 
 	rc = iio_read_channel_processed(chip->batt_therm_chan, temp);
 	if (rc < 0) {
